@@ -2,8 +2,71 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 extern char *str_dup(const char *src);
+//-------------------------------------------
+
+typedef enum {
+    OP_INSERT,
+    OP_DELETE,
+    OP_REPLACE
+} OpType;
+
+
+typedef struct UndoNode {
+    OpType type;       // 작업 종류
+    int line;          // 줄 번호
+    char *text;        // 이전 내용
+    struct UndoNode *next;
+} UndoNode;
+
+static UndoNode *undo_top = NULL; //스택
+//-------------------------------------------
+
+//스택 (직전 내용 불러오기)
+void undo_push(OpType type, int line, const char *text)
+{
+    UndoNode *n = malloc(sizeof(UndoNode));
+    if (!n) return;
+
+    n->type = type;
+    n->line = line;
+    n->text = text ? strdup(text) : NULL;
+    n->next = undo_top;
+    undo_top = n;
+}
+
+int undo_pop(OpType *type, int *line, char **text)
+{
+    if (!undo_top) return 0;
+
+    UndoNode *n = undo_top;
+    undo_top = n->next;
+
+    *type = n->type;
+    *line = n->line;
+    *text = n->text;   // 호출 쪽에서 free
+    free(n);
+    return 1;
+}
+
+int undo_is_empty()
+{
+    return undo_top == NULL;
+}
+
+//-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 //클립보드 큐 노드
 typedef struct ClipNode {

@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <conio.h>
 #include "edit.c"
+#include "recent.c"
 
 void show_ui();
 void show_logo();
 void button_test();
 void btn_createFile();
+void btn_openFile();
 
 
 int main(int argc, char *argv[])
@@ -59,12 +61,12 @@ void show_ui(){
         else if (ch == 13) {
             switch (selected) {
                 case 0: btn_createFile(); break;
-                case 1: button_test(); break;
-                case 2: button_test(); break;
+                case 1: btn_openFile(); break;
+                case 2: recent_menu(); break;
                 case 3: button_test(); break;
                 case 4: exit(0);
             }
-            return;
+            //return;
         }
     }
 
@@ -92,10 +94,45 @@ void btn_createFile()
         printf("\n 파일 생성 실패 !\n");
         perror("fopen");
         getch();
+        return;
     }
+    fclose(fp);
+
+    recent_touch(filename);
     start_edit(filename);
 
 }
+void btn_openFile()
+{
+    char filename[260];
+    system("cls");
+
+    printf("불러올 파일 이름을 입력하세요 (예 : test.txt) : ");
+    if (scanf("%259s", filename) != 1){
+        printf("\n 파일 입력 실패 !\n");
+        getch();
+        return;
+    }
+    //\n 제거
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF){}
+
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("\n 파일이 존재하지 않거나 열 수 없습니다 !\n");
+        perror("fopen");
+        getch();
+        return;
+    }
+    fclose(fp);
+
+    //최근 목록 갱신
+    recent_touch(filename);
+
+    start_edit(filename);
+}
+
+
 
 void button_test()
 {

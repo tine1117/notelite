@@ -1,0 +1,17 @@
+1. Battery Structure and Thermal Runaway
+2. Thermal Runaway Preemptive Detection Methods
+3. Thermal Runaway Preemptive Detection Algorithms
+4. Edgi AI Configuration and Utilization
+5. What is MQTT?
+6. What is NodeRED?
+7. MQTT Infrastructure Construction and Architecture Design
+8. Edgi Device Python Implementation
+9. Node-RED-Based Data Processing and Visualization System Overall Structure
+10. Node-RED-Based Monitoring System Database Design
+11. Node-RED-Based Monitoring System UI Design and Logic
+12. Node-RED-Based Monitoring System UI Design and Logic
+13. What is YOLO v8?
+14. YOLOv8 and the Applicability of AI Fire Detection Systems
+15. YOLO-Based Object Detection System Development Process
+16. Support Vector Machine-Based Battery Anomaly Detection Process
+17. Random Forest-Based Battery Anomaly Detection and Feature Importance Analysis

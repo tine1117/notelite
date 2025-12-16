@@ -13,6 +13,70 @@ typedef struct {
     */
 } Document;
 
+//------------------------------------------------------------------
+/*
+typedef struct BstNode {
+    int key;                //줄 번호(정렬 기준)
+    const char *text;       //Document의 lines[i] 포인터를 그대로 참조
+    struct BstNode *left;
+    struct BstNode *right;
+} BstNode;
+
+static BstNode* bst_new(int key, const char *text)
+{
+    BstNode *n = (BstNode*)malloc(sizeof(BstNode));
+    if (!n) return NULL;
+
+    n->key = key;
+    n->text = text;
+    n->left = NULL;
+    n->right = NULL;
+    return n;
+}
+
+static BstNode* bst_insert(BstNode *root, int key, const char *text)
+{
+    if (!root) return bst_new(key, text);
+
+    if (key < root->key) {
+        root->left = bst_insert(root->left, key, text);
+    } else if (key > root->key) {
+        root->right = bst_insert(root->right, key, text);
+    } else {
+        //같은 key는 덮어쓰기(사실상 발생하지 않음)
+        root->text = text;
+    }
+    return root;
+}
+
+static void bst_inorder_write(BstNode *root, FILE *fp)
+{
+    if (!root) return;
+
+    bst_inorder_write(root->left, fp);
+
+    if (root->text) {
+        fputs(root->text, fp);
+
+        //개행 없는 줄 안전 처리
+        int len = (int)strlen(root->text);
+        if (len == 0 || root->text[len-1] != '\n') {
+            fputc('\n', fp);
+        }
+    }
+
+    bst_inorder_write(root->right, fp);
+}
+
+static void bst_free(BstNode *root)
+{
+    if (!root) return;
+    bst_free(root->left);
+    bst_free(root->right);
+    free(root);
+}*/
+
+
 char *str_dup(const char *src){ //기존 strdup, 문자열 길이 계산, 할당 후 버퍼 포인터 반환
     size_t len = strlen(src);
     char *dst = (char *)malloc(len + 1);
@@ -118,7 +182,6 @@ int document_replace_line(Document *doc, int index, const char *text) {
     return 1;
 }
 
-
 int document_save(Document *doc, const char *filename)
 {
     FILE *fp = fopen(filename, "w");
@@ -132,6 +195,27 @@ int document_save(Document *doc, const char *filename)
     fclose(fp);
     return 1;
 }
+
+/*
+int document_save(Document *doc, const char *filename)
+{
+    FILE *fp = fopen(filename, "w");
+    if (!fp) return 0;
+
+    //Tree(BST)로 줄을 저장하고 inorder로 출력
+    BstNode *root = NULL;
+
+    for (int i = 0; i < doc->line_count; i++) {
+        root = bst_insert(root, i, doc->lines[i]); //key = 줄 번호
+    }
+
+    bst_inorder_write(root, fp);
+    bst_free(root);
+
+    fclose(fp);
+    return 1;
+}
+/**/
 
 
 
